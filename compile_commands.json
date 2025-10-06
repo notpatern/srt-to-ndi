@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/tea/Work/gstreamer-test/srt-to-ndi/build",
-  "command": "/usr/bin/c++  -isystem /usr/include/gstreamer-1.0 -isystem /usr/include/glib-2.0 -isystem /usr/lib/glib-2.0/include -isystem /usr/include/sysprof-6 -std=gnu++17 -pthread -o CMakeFiles/srt-to-ndi.dir/src/main.cpp.o -c /home/tea/Work/gstreamer-test/srt-to-ndi/src/main.cpp",
-  "file": "/home/tea/Work/gstreamer-test/srt-to-ndi/src/main.cpp",
-  "output": "CMakeFiles/srt-to-ndi.dir/src/main.cpp.o"
-}
-]
