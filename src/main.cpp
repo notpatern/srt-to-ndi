@@ -1,4 +1,5 @@
 #include <gstreamer-1.0/gst/gst.h>
+#include <iostream>
 
 static gboolean bus_call(GstBus *bus, GstMessage *msg, gpointer data) {
     GMainLoop *loop = (GMainLoop *)data;
@@ -35,19 +36,23 @@ int main(int argc, char *argv[]) {
 
     gst_init(&argc, &argv);
 
-    pipeline = gst_pipeline_new("srt-to-ndi-pipeline");
-
+    pipeline = gst_pipeline_new("pipeline");
+    std::cout << pipeline << "\n";
     srtsrc = gst_element_factory_make("srtsrc", "srtsrc");
+    std::cout << srtsrc << "\n";
     decodebin = gst_element_factory_make("decodebin", "decodebin");
+    std::cout << decodebin << "\n";
     videoconvert = gst_element_factory_make("videoconvert", "videoconvert");
+    std::cout << videoconvert << "\n";
     ndisink = gst_element_factory_make("ndisink", "ndisink");
+    std::cout << ndisink << "\n";
 
     if (!pipeline || !srtsrc || !decodebin || !videoconvert || !ndisink) {
         g_printerr("One element could not be created. Exiting.\n");
         return -1;
     }
 
-    g_object_set(srtsrc, "uri", "srt://srt-url", NULL);
+    g_object_set(srtsrc, "uri", "srt://https://skylog-ar.broadteam.eu/multiview", NULL);
 
     gst_bin_add_many(GST_BIN(pipeline), srtsrc, decodebin, videoconvert, ndisink, NULL);
 
