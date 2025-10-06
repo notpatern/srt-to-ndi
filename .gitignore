@@ -5,6 +5,10 @@
 /build
 /.cache
 
+# Compile Commands
+
+compile_commands.json
+
 # Compiled Object files
 *.slo
 *.lo
