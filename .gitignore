@@ -3,6 +3,7 @@
 
 # Build Directory
 /build
+/.cache
 
 # Compiled Object files
 *.slo
