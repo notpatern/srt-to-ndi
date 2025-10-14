@@ -1,0 +1,40 @@
+{
+    "version": 1,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 30,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "description": "Debug build",
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-g -Wno-format-security -Wno-deprecated-declarations -Wno-format-nonliteral",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "YES",
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "description": "Release build",
+            "generator": "MinGW Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-o3",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "YES",
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++"
+            }
+        }
+    ]
+}

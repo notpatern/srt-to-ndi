@@ -43,13 +43,28 @@ int main(int argc, char *argv[]) {
     gst_init(&argc, &argv);
 
     pipeline = gst_pipeline_new("pipeline");
-    srtsrc = gst_element_factory_make("srtsrc", "srtsrc");
     decodebin = gst_element_factory_make("decodebin", "decodebin");
     videoconvert = gst_element_factory_make("videoconvert", "videoconvert");
     ndisink = gst_element_factory_make("ndisink", "ndisink");
+    srtsrc = gst_element_factory_make("srtsrc", "srtsrc");
 
-    if (!pipeline || !srtsrc || !decodebin || !videoconvert || !ndisink) {
-        g_printerr("One element could not be created. Exiting.\n");
+    if (!pipeline) {
+        g_printerr("Pipeline could not be created. Exiting.\n");
+        return -1;
+    }
+    if (!decodebin) {
+        g_printerr("decodebin could not be created. Exiting.\n");
+        return -1;
+    }
+    if (!videoconvert) {
+        g_printerr("videoconvert could not be created. Exiting.\n");
+        return -1;
+    }
+    if (!ndisink) {
+        g_printerr("ndisink could not be created. Exiting.\n");
+        return -1;
+    }
+    if (!srtsrc) {
         return -1;
     }
 

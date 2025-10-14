@@ -9,7 +9,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(gst REQUIRED IMPORTED_TARGET gstreamer-1.0)
 
-# Find all source files recursively
 file(GLOB_RECURSE SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
