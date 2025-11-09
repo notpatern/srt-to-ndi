@@ -1,11 +1,10 @@
 #!/bin/bash
 
 mkdir build
-cd build
 
-cmake -S .. -B .
-mv compile_commands.json ../compile_commands.json
+cmake --preset=debug
+mv ./build/compile_commands.json ./compile_commands.json
 
-cmake --build .
+mingw32-make -C ./build
 
 PAUSE
