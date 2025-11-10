@@ -29,24 +29,35 @@ public:
         if (!pipeline || !srtsrc || !queue1 || !tsdemux || !queue2 ||
             !h264parse || !avdec_h264 || !videoconvert || !ndisink) {
             std::cout << "Not all elements could be created." << std::endl;
+            return;
         }
+        std::cout << "Elements created" << std::endl;
 
         g_object_set(G_OBJECT(srtsrc), "uri", srt_uri.c_str(), NULL);
         g_object_set(G_OBJECT(ndisink), "ndi-name", ndi_name.c_str(), NULL);
 
+        std::cout << "Objects set" << std::endl;
+
         gst_bin_add_many(GST_BIN(pipeline), srtsrc, queue1, tsdemux, queue2, h264parse, avdec_h264, videoconvert, ndisink, NULL);
+
+        std::cout << "bin add many" << std::endl;
 
         if (!gst_element_link(srtsrc, queue1)) {
             std::cout << "Failed to link srtsrc to queue1" << std::endl;
+            return;
         }
 
         if (!gst_element_link(queue1, tsdemux)) {
             std::cout << "Failed to link queue1 to tsdemux" << std::endl;
+            return;
         }
 
         if (!gst_element_link_many(queue2, h264parse, avdec_h264, videoconvert, ndisink, NULL)) {
             std::cout << "Failed to link decoder pipeline" << std::endl;
+            return;
         }
+
+        std::cout << "Nothing failed gamer we gaming so hard" << std::endl;
 
         g_signal_connect(tsdemux, "pad-added", G_CALLBACK(on_pad_added), queue2);
 
@@ -73,7 +84,8 @@ public:
         if (g_str_has_prefix(name, "video/")) {
             if (!gst_pad_is_linked(sinkpad)) {
                 if (gst_pad_link(pad, sinkpad) != GST_PAD_LINK_OK) {
-                    std::cerr << "Failed to link demuxer pad" << std::endl;
+                    std::cout << "Failed to link demuxer pad" << std::endl;
+                    return;
                 }
             }
         }
@@ -88,9 +100,17 @@ public:
     }
 
     void run() {
+        std::cout << "Running" << std::endl;
+
+        if (pipeline) {
+            std::cout << "pipeline still active" << std::endl;
+        }
+
         GstMessage *msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, (GstMessageType)(GST_MESSAGE_ERROR | GST_MESSAGE_EOS));
 
-        std::cout << "Running" << std::endl;
+        if (!msg) {
+            std::cout << "Message is null" << std::endl;
+        }
 
         if (msg != NULL) {
             GError *err;
