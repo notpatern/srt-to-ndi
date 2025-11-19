@@ -16,7 +16,7 @@ private:
 
 public:
     SrtToNdiPipeline(const std::string& srt_uri, const std::string& ndi_name) {
-        pipeline = gst_pipeline_new("srt-to-ndi");
+        pipeline = gst_pipeline_new(ndi_name.c_str());
         srtsrc = gst_element_factory_make("srtsrc", "srt-source");
         queue1 = gst_element_factory_make("queue", "queue1");
         tsdemux = gst_element_factory_make("tsdemux", "demuxer");
@@ -26,11 +26,43 @@ public:
         videoconvert = gst_element_factory_make("videoconvert", "converter");
         ndisink = gst_element_factory_make("ndisink", "ndi-output");
 
-        if (!pipeline || !srtsrc || !queue1 || !tsdemux || !queue2 ||
-            !h264parse || !avdec_h264 || !videoconvert || !ndisink) {
-            std::cout << "Not all elements could be created." << std::endl;
+        if (!pipeline) {
+            std::cout << "pipeline error" << std::endl;
             return;
         }
+        if (!srtsrc) {
+            std::cout << "srtsrc error" << std::endl;
+            return;
+        }
+        if (!queue1) {
+            std::cout << "queue1 error" << std::endl;
+            return;
+        }
+        if (!tsdemux) {
+            std::cout << "tsdemux error" << std::endl;
+            return;
+        }
+        if (!queue2) {
+            std::cout << "queue2 error" << std::endl;
+            return;
+        }
+        if (!h264parse) {
+            std::cout << "h264parse error" << std::endl;
+            return;
+        }
+        if (!avdec_h264) {
+            std::cout << "avdec_h264 error" << std::endl;
+            return;
+        }
+        if (!videoconvert) {
+            std::cout << "videoconvert error" << std::endl;
+            return;
+        }
+        if (!ndisink) {
+            std::cout << "ndisink error" << std::endl;
+            return;
+        }
+
         std::cout << "Elements created" << std::endl;
 
         g_object_set(G_OBJECT(srtsrc), "uri", srt_uri.c_str(), NULL);
@@ -92,6 +124,7 @@ public:
 
         gst_caps_unref(caps);
         gst_object_unref(sinkpad);
+        std::cout << "pad added" << std::endl;
     }
 
     void start() {
@@ -116,20 +149,23 @@ public:
             GError *err;
             gchar *debug_info;
 
-            switch (GST_MESSAGE_TYPE(msg)) {
-                case GST_MESSAGE_ERROR:
-                    gst_message_parse_error(msg, &err, &debug_info);
-                    std::cout << "Error: " << err->message << std::endl;
-                    std::cout << "Debug: " << (debug_info ? debug_info : "none") << std::endl;
-                    g_clear_error(&err);
-                    g_free(debug_info);
-                    break;
-                case GST_MESSAGE_EOS:
-                    std::cout << "End of stream" << std::endl;
-                    break;
-                default:
-                    break;
-            }
+            //switch (GST_MESSAGE_TYPE(msg)) {
+            //    case GST_MESSAGE_ERROR:
+            //        gst_message_parse_error(msg, &err, &debug_info);
+            //        std::cout << "Error: " << err->message << std::endl;
+            //        std::cout << "Debug: " << (debug_info ? debug_info : "none") << std::endl;
+            //        g_clear_error(&err);
+            //        g_free(debug_info);
+            //        break;
+            //    case GST_MESSAGE_EOS:
+            //        std::cout << "End of stream" << std::endl;
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+            gst_message_parse_error(msg, &err, &debug_info);
+            std::cout << err->message << std::endl;
             gst_message_unref(msg);
         }
 
@@ -147,6 +183,7 @@ int main(int argc, char *argv[]) {
 
     std::string srt_uri = argv[1];
     std::string ndi_name = "SrtToNdi";
+
     if (argc > 2) {
         ndi_name = argv[2];
     }
